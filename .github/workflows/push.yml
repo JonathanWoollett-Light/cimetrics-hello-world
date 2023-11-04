@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - main
 
 env:
   CARGO_TERM_COLOR: always
@@ -10,6 +12,7 @@ jobs:
 
     env:
       PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
+      TO: ${{ github.event.push.after }}
 
     steps:
     - uses: actions/checkout@v3
@@ -21,3 +24,4 @@ jobs:
 
     - name: Upload metrics
       run: ./upload.sh
+

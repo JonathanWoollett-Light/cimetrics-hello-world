@@ -18,28 +18,11 @@ jobs:
       with:
         fetch-depth: 2
 
-    - name: Set env variable
-      run: |
-        echo "Upload=\"{ \"user\": { \"public_key\": \"6546b543a35b7d5af8c93a7b\", \"private_key\": $MetricsPrivateKey }, \"sha\": \"${{ github.event.pull_request.target.sha }}\" }\"" >> "$GITHUB_ENV"
-        echo "Difference=\"{ \"user\": { \"public_key\": \"6546b543a35b7d5af8c93a7b\", \"private_key\": $MetricsPrivateKey }, \"from\": \"${{ github.event.pull_request.base.sha }}\", \"to\": \"${{ github.event.pull_request.target.sha }}\" }\"" >> "$GITHUB_ENV"
-
-    - name: Set env variable
-      run: |
-        echo "UploadCmd=\"curl -X POST -d \"$Upload\" -H \"Content-Type: application/json\" -i http://3.10.39.149:3000/metrics\"" >> "$GITHUB_ENV"
-        echo "DifferenceCmd=\"curl -X GET -d \"$Difference\" -H \"Content-Type: application/json\" -i http://3.10.39.149:3000/diff_pretty\"" >> "$GITHUB_ENV"
-
-    - name: See vars
-      run: |
-        echo "$Upload"
-        echo "$UploadCmd"
-        echo "$Difference"
-        echo "$DifferenceCmd"
-
     - name: Test
       run: cargo test
 
     - name: Upload metrics
-      run: eval $UploadCmd
+      run: ./upload.sh
 
-    - name: Get difference
-      run: eval $DifferenceCmd
+    - name: Diff metrics
+      run: ./diff.sh
