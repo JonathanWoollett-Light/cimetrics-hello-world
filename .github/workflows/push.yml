@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - master
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+
+    env:
+      PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
+      TO: ${{ github.event.after }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+
+    - name: Test
+      run: cargo test
+
+    - name: Upload metrics
+      run: ./upload.sh
+

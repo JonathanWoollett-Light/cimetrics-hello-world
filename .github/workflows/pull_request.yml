@@ -1,0 +1,28 @@
+on:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+
+    env:
+      PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
+      FROM: ${{ github.event.pull_request.base.sha }}
+      TO: ${{ github.event.pull_request.head.sha }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+
+    - name: Test
+      run: cargo test
+
+    - name: Upload metrics
+      run: ./upload.sh
+
+    - name: Diff metrics
+      run: ./diff.sh
