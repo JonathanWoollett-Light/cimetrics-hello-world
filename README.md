@@ -10,7 +10,7 @@ You can see the commit history of metrics by visiting http://3.10.39.149:3000/di
 
 ![Example display](./display_example.webp)
 
-### Setup
+## Setup
 
 You can create an account with `curl -X POST http://3.10.39.149:3000/users`, this will return your `public_key` and `private_key`. There is no recovery mechanism, don't loose these.
 
