@@ -14,6 +14,12 @@ You can see the commit history of metrics by visiting http://3.10.39.149:3000/di
 
 You can create an account with `curl -X POST http://3.10.39.149:3000/users`, this will return your `public_key` and `private_key`. There is no recovery mechanism, don't loose these.
 
-For the rest, look at this repo as an example. Feel free to copy & paste [upload.sh](./upload.sh) and [diff.py](./diff.py).
+Metrics can be plotted on the same graph by setting metric sets.
+
+You can use `curl -X GET http://3.10.39.149:3000/metrics/sets -d { "public_key": "<your public key>", "private_key": <your private key> }` to get the current sets on your account.
+
+You can use `curl -X POST http://3.10.39.149:3000/metrics/sets -d { "user": { "public_key": "<your public key>", "private_key": <your private key> }, "metric_sets": [["metric_one","metric_two"]]}` to set the current sets on your account. In this case it sets 1 set which will plot `metric_one` and `metric_two` on the same graph
 
 To display metrics visit `http://3.10.39.149:3000/display/<your public key>/<your private key>` and enter the repository into the input box.
+
+For the rest, look at this repo as an example. Feel free to copy & paste [upload.sh](./upload.sh) and [diff.py](./diff.py).
