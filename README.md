@@ -6,6 +6,8 @@ A repo presenting an example system for tracking generic metrics in CI like [cod
 
 On PR's a diff of metrics can be commented, see https://github.com/JonathanWoollett-Light/cimetrics-hello-world/pull/4#issuecomment-1793852601.
 
+![Example PR comment](./pr_comment_example.webp)
+
 You can see the commit history of metrics by visiting http://3.10.39.149:3000/display/6546b543a35b7d5af8c93a7b/206925525691777734527727329171694843736 and entering `JonathanWoollett-Light/cimetrics-hello-world` in the input box.
 
 ![Example display](./display_example.webp)
