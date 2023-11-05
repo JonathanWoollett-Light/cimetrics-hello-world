@@ -12,11 +12,12 @@ jobs:
       PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
       FROM: ${{ github.event.pull_request.base.sha }}
       TO: ${{ github.event.pull_request.head.sha }}
+      REPO: ${{ github.repository }}
+      ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+      TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
 
     - name: Test
       run: cargo test
@@ -25,4 +26,4 @@ jobs:
       run: ./upload.sh
 
     - name: Diff metrics
-      run: ./diff.sh
+      run: python3 ./diff.py

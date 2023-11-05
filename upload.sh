@@ -3,6 +3,7 @@
 DATA=$( cat ./metrics )
 echo "data: { $DATA }"
 
+# Upload metrics
 curl \
     -X POST \
     -d "{ \"user\": { \"public_key\": \"6546b543a35b7d5af8c93a7b\", \"private_key\": $PRIVATE_KEY }, \"sha\": \"$TO\", \"metrics\": { $DATA } }" \
