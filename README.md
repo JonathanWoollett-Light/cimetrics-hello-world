@@ -16,4 +16,4 @@ To upload metrics see [upload.sh](./upload.sh).
 
 To diff metrics see [diff.sh](./diff.sh).
 
-To display metrics see above.
+To display metrics visit `http://3.10.39.149:3000/display/<your public key>/<your private key>` and enter the repository into the input box.
