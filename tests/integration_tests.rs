@@ -47,7 +47,7 @@ fn random_two() {
 // 1/4 of the time doesn't upload metrics.
 #[test]
 fn inconsistent() {
-    if rand::thread_rng().gen::<u8>() as u64 > (u64::MAX / 4) {
+    if rand::thread_rng().gen::<u8>() > (u8::MAX / 4) {
         append_metric("inconsistent_constant",2);
         append_metric("inconsistent_random", rand::thread_rng().gen::<u8>() as u64);
     }
