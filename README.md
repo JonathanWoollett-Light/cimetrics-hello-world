@@ -14,8 +14,6 @@ You can see the commit history of metrics by visiting http://3.10.39.149:3000/di
 
 You can create an account with `curl -X POST http://3.10.39.149:3000/users`, this will return your `public_key` and `private_key`. There is no recovery mechanism, don't loose these.
 
-To upload metrics see [upload.sh](./upload.sh).
-
-To diff metrics see [diff.sh](./diff.sh).
+For the rest, look at this repo as an example. Feel free to copy & paste [upload.sh](./upload.sh) and [diff.py](./diff.py).
 
 To display metrics visit `http://3.10.39.149:3000/display/<your public key>/<your private key>` and enter the repository into the input box.
