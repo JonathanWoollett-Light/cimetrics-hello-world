@@ -9,17 +9,18 @@ env:
 jobs:
   rust:
     runs-on: ubuntu-latest
-
-    env:
-      PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
-      TO: ${{ github.event.after }}
-
     steps:
     - uses: actions/checkout@v3
 
     - name: Test
       run: cargo test
 
-    - name: Upload metrics
-      run: ./upload.sh
-
+    - name: CI Metrics
+      run: python3 ./run.py
+      env:
+        # Variables to interact with CI Metrics.
+        PUBLIC_KEY: "6546b543a35b7d5af8c93a7b"
+        PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
+        # Variables to upload
+        HEAD: ${{ github.event.after }}
+        DATA_FILE: "./metrics"

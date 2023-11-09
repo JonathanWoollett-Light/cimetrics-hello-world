@@ -7,23 +7,23 @@ env:
 jobs:
   rust:
     runs-on: ubuntu-latest
-
-    env:
-      PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
-      FROM: ${{ github.event.pull_request.base.sha }}
-      TO: ${{ github.event.pull_request.head.sha }}
-      REPO: ${{ github.repository }}
-      ISSUE_NUMBER: ${{ github.event.pull_request.number }}
-      TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
     - uses: actions/checkout@v3
 
     - name: Test
       run: cargo test
 
-    - name: Upload metrics
-      run: ./upload.sh
-
-    - name: Diff metrics
-      run: python3 ./diff.py
+    - name: CI Metrics
+      run: python3 ./run.py
+      env:
+        # Variables to interact with CI Metrics.
+        PUBLIC_KEY: "6546b543a35b7d5af8c93a7b"
+        PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
+        # Variables to upload
+        HEAD: ${{ github.event.pull_request.head.sha }}
+        DATA_FILE: "./metrics"
+        # Variables to diff
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BASE: ${{ github.event.pull_request.base.sha }}
+        ISSUE: ${{ github.event.pull_request.number }}
+        REPO: ${{ github.repository }}
