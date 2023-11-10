@@ -19,6 +19,7 @@ jobs:
         # Variables to interact with CI Metrics.
         PUBLIC_KEY: "6546b543a35b7d5af8c93a7b"
         PRIVATE_KEY: ${{ secrets.MetricsPrivateKey }}
+        REPO: ${{ github.repository }}
         # Variables to upload
         HEAD: ${{ github.event.pull_request.head.sha }}
         DATA_FILE: "./metrics"
@@ -26,4 +27,3 @@ jobs:
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BASE: ${{ github.event.pull_request.base.sha }}
         ISSUE: ${{ github.event.pull_request.number }}
-        REPO: ${{ github.repository }}

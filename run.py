@@ -10,7 +10,7 @@ GITHUB_REPO_API = "https://api.github.com/repos/"
 
 
 # Uploads metrics
-def upload(sha, public_key, private_key, data):
+def upload(sha, public_key, private_key, data, repo):
     print(f"Running upload.")
     payload = json.dumps(
         {
@@ -19,6 +19,7 @@ def upload(sha, public_key, private_key, data):
                 "private_key": private_key,
             },
             "sha": sha,
+            "repo": repo,
             "metrics": data,
         }
     )
@@ -54,7 +55,7 @@ def diff(base, head, public_key, private_key):
     assert response.status_code == 200
     print(f"response.json(): {response.json()}")
     diff = response.json()
-    table = "Metric|∆%|∆|Old|New\n--:|--:|--:|--:|--:\n"
+    table = "Metric|∆%|∆|Old|New\n---|--:|--:|--:|--:\n"
 
     table_set = []
     for key, value in diff.items():
@@ -62,14 +63,14 @@ def diff(base, head, public_key, private_key):
         y = value["to"]
         if x != None and y != None:
             d = y - x
-            pd = 100 * float(d) / float(x)
+            pd = f"{100 * float(d) / float(x):+.2f}" if x != 0 else "NaN"
             table_set.append(
                 (
                     key,
-                    f"{pd:+.2f}",
-                    f"{d:+}",
-                    str(x),
-                    str(y),
+                    pd,
+                    f"{d:+,}",
+                    f"{x:,}",
+                    f"{y:,}",
                 )
             )
         else:
@@ -78,8 +79,8 @@ def diff(base, head, public_key, private_key):
                     key,
                     "NaN",
                     "NaN",
-                    str(x),
-                    str(y),
+                    "None" if x is None else f"{x:,}",
+                    "None" if y is None else f"{x:,}",
                 )
             )
     print(f"table_set: {table_set}")
@@ -150,37 +151,41 @@ head = os.environ["HEAD"]
 
 DATA_TEXT = "DATA_TEXT"
 DATA_FILE = "DATA_FILE"
+REPO = "REPO"
 
 data_text = os.environ.get(DATA_TEXT)
 data_file = os.environ.get(DATA_FILE)
+repo = os.environ.get(REPO)
 
-if data_text is None and data_file is not None:
+if data_text is None and data_file is not None and repo is not None:
     print(f"data_text: {data_file}")
     data_str = open(data_file, "r").read()
     print(f"data_str: {data_str}")
-    upload(head, public_key, private_key, json.loads(data_str))
-elif data_text is not None and data_file is None:
+    upload(head, public_key, private_key, json.loads(data_str), repo)
+elif data_text is not None and data_file is None and repo is not None:
     print(f"data_text: {data_text}")
-    upload(head, public_key, private_key, json.loads(data_text))
+    upload(head, public_key, private_key, json.loads(data_text), repo)
+elif data_text is None and data_file is None and repo is None:
+    print(f"Neither `{DATA_TEXT}`, `{DATA_FILE}` or `{REPO}` set, skipping upload.")
 else:
-    print(f"Neither `{DATA_TEXT}` or `{DATA_FILE}` set, skipping upload.")
+    raise Exception(
+        f"`{DATA_TEXT}` ({data_text}) or `{DATA_FILE}` ({data_file}), and `{REPO}` ({repo}) must be set when any are set."
+    )
 
 BASE = "BASE"
 ISSUE = "ISSUE"
 TOKEN = "TOKEN"
-REPO = "REPO"
 
 base = os.environ.get(BASE)
 issue = os.environ.get(ISSUE)
 token = os.environ.get(TOKEN)
-repo = os.environ.get(REPO)
 
-if head is not None and issue is not None and token is not None and repo is not None:
+if base is not None and issue is not None and token is not None and repo is not None:
     table = diff(base, head, public_key, private_key)
     post(repo, issue, token, table)
-elif head is None and issue is None and token is None and repo is None:
-    print(f"None of `{BASE}`, `{ISSUE}`, `{TOKEN}` or `{REPO}` set, skipping diff.")
+elif base is None and issue is None and token is None and repo is None:
+    print(f"None of `{BASE}`, `{ISSUE}` or `{TOKEN}` set, skipping diff.")
 else:
     raise Exception(
-        f"`{BASE}` ({base}), `{ISSUE}` ({issue}), `{TOKEN}` ({token}) and `{REPO}` ({repo}) must all be set when any are set."
+        f"`{BASE}` ({base}), `{ISSUE}` ({issue}) and `{TOKEN}` ({token}) must all be set when any are set."
     )
