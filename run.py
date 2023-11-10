@@ -183,7 +183,7 @@ token = os.environ.get(TOKEN)
 if base is not None and issue is not None and token is not None and repo is not None:
     table = diff(base, head, public_key, private_key)
     post(repo, issue, token, table)
-elif base is None and issue is None and token is None and repo is None:
+elif base is None and issue is None and token is None:
     print(f"None of `{BASE}`, `{ISSUE}` or `{TOKEN}` set, skipping diff.")
 else:
     raise Exception(
