@@ -151,25 +151,25 @@ head = os.environ["HEAD"]
 
 DATA_TEXT = "DATA_TEXT"
 DATA_FILE = "DATA_FILE"
-REPO = "REPO"
+REPO = "GITHUB_REPOSITORY"
 
 data_text = os.environ.get(DATA_TEXT)
 data_file = os.environ.get(DATA_FILE)
-repo = os.environ.get(REPO)
+repo = os.environ[REPO]
 
-if data_text is None and data_file is not None and repo is not None:
+if data_text is None and data_file is not None:
     print(f"data_text: {data_file}")
     data_str = open(data_file, "r").read()
     print(f"data_str: {data_str}")
     upload(head, public_key, private_key, json.loads(data_str), repo)
-elif data_text is not None and data_file is None and repo is not None:
+elif data_text is not None and data_file is None:
     print(f"data_text: {data_text}")
     upload(head, public_key, private_key, json.loads(data_text), repo)
 elif data_text is None and data_file is None and repo is None:
     print(f"Neither `{DATA_TEXT}`, `{DATA_FILE}` or `{REPO}` set, skipping upload.")
 else:
     raise Exception(
-        f"`{DATA_TEXT}` ({data_text}) or `{DATA_FILE}` ({data_file}), and `{REPO}` ({repo}) must be set when any are set."
+        f"`{DATA_TEXT}` ({data_text}) and `{DATA_FILE}` ({data_file}) must not both be set."
     )
 
 BASE = "BASE"
