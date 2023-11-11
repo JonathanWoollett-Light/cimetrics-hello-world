@@ -39,16 +39,24 @@ Set metrics to display on the same chart with:
 ```bash
 curl -X POST http://3.10.39.149:3000/metrics/sets -d "{ \
     \"user\": { \
-        \"public_key\": \"<your public key>\",
+        \"public_key\": \"<your public key>\", \
         \"private_key\": <your private key> \
     }, \
-    \"metric_sets\": [[\"metric_one\",\"metric_two\"]] \
+    \"metric_sets\": [ \
+        [\"metric_one\",\"metric_two\"], \
+        [\"metric_three\",\"metric_four\"] \
+    ] \
 }"
 ```
 
-This sets `metric_one` and `metric_two` as the only metrics to display on the chart.
+This sets:
 
-Get metrics you displayon the same chart with:
+- `metric_one` and `metric_two` to display on the same chart.
+- `metric_three` and `metric_four` to display on the same chart.
+
+*Any metric will only ever display on 1 chart.*
+
+Get metrics you display on the same chart with:
 
 ```bash
 curl -X GET http://3.10.39.149:3000/metrics/sets -d "{ \
