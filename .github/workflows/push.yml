@@ -16,7 +16,9 @@ jobs:
       run: cargo test
 
     - name: CI Metrics
-      run: python3 ./run.py
+      run: |
+        wget https://raw.githubusercontent.com/JonathanWoollett-Light/cimetrics-script/v0.1.0/run.py
+        python3 ./run.py
       env:
         # Variables to interact with CI Metrics.
         PUBLIC_KEY: "6546b543a35b7d5af8c93a7b"
